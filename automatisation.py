@@ -1,7 +1,6 @@
 import json
 import os
 
-# Fonction pour convertir la préférence en valeur numérique
 def p_number(preference):
     if preference == "low":
         return 100
@@ -12,7 +11,6 @@ def p_number(preference):
     else:
         return 0
 
-# Fonction pour générer la configuration Cisco pour un routeur
 def generate_cisco_config(router):
     config = []
     config.append(f"hostname {router['router_id']}")
@@ -45,17 +43,14 @@ def generate_cisco_config(router):
 
     return "\n".join(config)
 
-# Lecture du fichier JSON d'intention
-intent_file_path = "/home/user/config.json" # Remplacer par le chemin de votre fichier d'intention
+intent_file_path = "/home/user/config.json" 
 with open(intent_file_path, 'r') as file:
     data = json.load(file)
 
-# Génération des configurations Cisco
 cisco_configs = {}
 for router in data['routers']:
     cisco_configs[router['router_id']] = generate_cisco_config(router)
 
-# Écriture des configurations dans des fichiers
 output_dir = "/home/user/json" # Remplacer par votre chemin de dossier de sortie
 for router_id, config in cisco_configs.items():
     with open(os.path.join(output_dir, f"{router_id}_config.txt"), "w") as file:
